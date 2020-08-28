@@ -27,7 +27,7 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-	console.log("Message revieced")
+	console.log(message.content)
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
