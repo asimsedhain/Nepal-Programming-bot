@@ -28,6 +28,8 @@ client.on("ready", () => {
 
 client.on("message", (message) => {
 	console.log(message)
+	console.log(!message.content.startsWith(PREFIX))
+	console.log(message.author.bot)
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
