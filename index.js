@@ -27,7 +27,6 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-	console.log(message.content)
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
@@ -43,6 +42,7 @@ client.on("message", (message) => {
 		username = message.author.username;
 		PomodoroCount[username] = count;
 		message.channel.send(displayList({ [username]: count }, ADDED_HEADER));
+		console.log(`${username} added ${count} pomodoros`)
 		return;
 	}
 
