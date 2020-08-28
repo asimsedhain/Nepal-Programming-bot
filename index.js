@@ -14,7 +14,7 @@ let PomodoroCount = {};
 
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	console.log(`Start with ${PREFIX}`)
+	console.log(`Start with ${PREFIX}`);
 	let job = new CronJob(
 		"0 0 0 * * *",
 		dailyWinner,
@@ -42,12 +42,16 @@ client.on("message", (message) => {
 		username = message.author.username;
 		PomodoroCount[username] = count;
 		message.channel.send(displayList({ [username]: count }, ADDED_HEADER));
-		console.log(`${username} added ${count} pomodoros`)
+		console.log(`${username} added ${count} pomodoros`);
 		return;
 	}
 
 	message.channel.send(
-		"Usage: `/pomo` to see daily rankings. `/pomo COUNT` to insert your pomodoro count. "
+		"Usage: `" +
+			PREFIX +
+			"` to see daily rankings. `" +
+			PREFIX +
+			" COUNT` to insert your pomodoro count. "
 	);
 });
 
