@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-//const CronJob = require("cron").CronJob;
+const CronJob = require("cron").CronJob;
 const client = new Discord.Client();
 require("dotenv").config();
 
@@ -27,9 +27,6 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-	console.log(message)
-	console.log(!message.content.startsWith(PREFIX))
-	console.log(message.author.bot)
 	if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
 	const args = message.content.slice(PREFIX.length).trim().split(/ +/);
