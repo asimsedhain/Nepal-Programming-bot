@@ -14,6 +14,7 @@ let PomodoroCount = {};
 
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	console.log(`Start with ${PREFIX}`)
 	//let job = new CronJob(
 		//"0 0 0 * * *",
 		//dailyWinner,
