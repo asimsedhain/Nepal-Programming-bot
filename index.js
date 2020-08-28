@@ -15,15 +15,15 @@ let PomodoroCount = {};
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	console.log(`Start with ${PREFIX}`)
-	//let job = new CronJob(
-		//"0 0 0 * * *",
-		//dailyWinner,
-		//null,
-		//true,
-		//"Asia/Kathmandu"
-	//);
-	//job.start();
-	//console.log("Cron job stated!");
+	let job = new CronJob(
+		"0 0 0 * * *",
+		dailyWinner,
+		null,
+		true,
+		"Asia/Kathmandu"
+	);
+	job.start();
+	console.log("Cron job stated!");
 });
 
 client.on("message", (message) => {
