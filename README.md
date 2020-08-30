@@ -13,4 +13,4 @@ This is the initial and currently the only command supported by the bot. It allo
 
 
 ## Contributions
-To contribute to this project, please look at the contribution guide.
+To contribute to this project, please look at the [contribution guide](./CONTRIBUTING.md).
