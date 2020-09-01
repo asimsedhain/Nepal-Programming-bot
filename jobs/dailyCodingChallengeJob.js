@@ -1,5 +1,7 @@
 const leetcodeStore = require("../store/leetcodeStore");
+const QuestionStore = require("../store/QuestionStore")
 const Discord = require("discord.js");
+const displayLeetcode=require('../utils/displayLeetcode')
 
 const DAILY_CHALLENGE_CHANNEL_ID = process.env.DAILY_CHALLENGE_CHANNEL_ID;
 
@@ -9,14 +11,14 @@ const initLeetcodeStore = (store, keys) => {
 };
 
 
-const dailyCodingChallengeJob = async (client, data) => {
+const dailyCodingChallengeJob = async (client) => {
 	if (leetcodeStore.topic === "") {
-		initLeetcodeStore(leetcodeStore, Object.keys(data));
+		initLeetcodeStore(leetcodeStore, Object.keys(QuestionStore));
 	}
 	try {
 		const channel = await client.channels.fetch(DAILY_CHALLENGE_CHANNEL_ID);
 		const challengeList =
-			data[leetcodeStore.topic][leetcodeStore.difficulty];
+			QuestionStore[leetcodeStore.topic][leetcodeStore.difficulty];
 		const challenge =
 			challengeList[Math.floor(Math.random() * challengeList.length)];
 		channel.send(
@@ -26,13 +28,14 @@ const dailyCodingChallengeJob = async (client, data) => {
 				challenge.id,
 				challenge.difficulty,
 				challenge.url,
-				leetcodeStore.topic
+				leetcodeStore.topic,
+				"This weeks topic"
 			)
 		);
 		const day = new Date().getDay();
 		leetcodeStore.difficulty = numToDifficulty(day);
 		if (day === 6) {
-			keys = Object.keys(data)
+			keys = Object.keys(QuestionStore)
 			leetcodeStore.topic = keys[Math.floor(Math.random() * keys.length)];
 		}
 		console.log("Daily Challenge Message Success");
@@ -52,17 +55,6 @@ const numToDifficulty = (num) => {
 	return "hard";
 };
 
-const displayLeetcode = (header, challengeName, id, difficulty, url, topic) => {
-	const messageEmbed = new Discord.MessageEmbed()
-		.setColor("#00f0ff")
-		.setTitle(header)
-		.setDescription(`**[${challengeName}](https://leetcode.com${url})**`)
-		.addFields(
-			{ name: "Weekly Topic", value: topic },
-			{ name: "ID", value: id },
-			{ name: "Difficulty", value: difficulty }
-		);
-	return messageEmbed;
-};
+
 
 module.exports = dailyCodingChallengeJob;
