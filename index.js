@@ -1,3 +1,4 @@
+const fs = require("fs");
 require("dotenv").config();
 const TOKEN = process.env.TOKEN;
 const WELCOME_CHANNEL_ID = process.env.WELCOME_CHANNEL_ID;
@@ -9,13 +10,18 @@ const Discord = require("discord.js");
 const createJob = require("./utils/createJob");
 const pomoCommandHandler = require("./handlers/pomoCommandHandler");
 const dailyPomodoroResetJob = require("./jobs/dailyPomodoroResetJob");
+const dailyCodingChallengeJob = require("./jobs/dailyCodingChallengeJob");
 const displayMessage = require("./utils/displayMessage");
 
 const client = new Discord.Client();
+
+const questionBankRaw = fs.readFileSync("./assets/grouped_data.json");
+const questionBank = JSON.parse(questionBankRaw);
+
 const commands = {};
 commands["!pomo"] = pomoCommandHandler;
 
-client.on("ready", () => {
+client.on("ready", async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	createJob(
 		"Pomodoro",
@@ -24,6 +30,9 @@ client.on("ready", () => {
 		},
 		"0 0 0 * * *"
 	);
+	createJob("Leetcode", ()=>{
+	dailyCodingChallengeJob(client, questionBank);
+	}, "* * * * * *")
 });
 
 client.on("message", (message) => {
