@@ -13,6 +13,8 @@ const initLeetcodeStore = (store, keys) => {
 
 const dailyCodingChallengeJob = async (client) => {
 	if (leetcodeStore.topic === "") {
+		
+		console.log("Leetcode Store initialized!")
 		initLeetcodeStore(leetcodeStore, Object.keys(QuestionStore));
 	}
 	try {
@@ -34,7 +36,9 @@ const dailyCodingChallengeJob = async (client) => {
 		);
 		const day = new Date().getDay();
 		leetcodeStore.difficulty = numToDifficulty(day);
+		console.log("Leetcode difficulty changed!")
 		if (day === 6) {
+			console.log("Leetcode topic changed!")
 			keys = Object.keys(QuestionStore)
 			leetcodeStore.topic = keys[Math.floor(Math.random() * keys.length)];
 		}
