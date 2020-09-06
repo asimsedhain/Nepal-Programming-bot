@@ -1,28 +1,13 @@
-const leetcodeStore = require("../store/leetcodeStore");
-const QuestionStore = require("../store/QuestionStore")
+const OrderedQuestionStore = require("../store/OrderedQuestionStore");
 const Discord = require("discord.js");
-const displayLeetcode=require('../utils/displayLeetcode')
+const displayLeetcode = require("../utils/displayLeetcode");
 
 const DAILY_CHALLENGE_CHANNEL_ID = process.env.DAILY_CHALLENGE_CHANNEL_ID;
 
-const initLeetcodeStore = (store, keys) => {
-	store.topic = keys[Math.floor(Math.random() * keys.length)];
-	store.difficulty = numToDifficulty(new Date().getDay());
-};
-
-
 const dailyCodingChallengeJob = async (client) => {
-	if (leetcodeStore.topic === "") {
-		
-		console.log("Leetcode Store initialized!")
-		initLeetcodeStore(leetcodeStore, Object.keys(QuestionStore));
-	}
 	try {
+		const challenge = OrderedQuestionStore[daysSinceFirst()]	
 		const channel = await client.channels.fetch(DAILY_CHALLENGE_CHANNEL_ID);
-		const challengeList =
-			QuestionStore[leetcodeStore.topic][leetcodeStore.difficulty];
-		const challenge =
-			challengeList[Math.floor(Math.random() * challengeList.length)];
 		channel.send(
 			displayLeetcode(
 				"Daily Coding Challenge!!",
@@ -30,18 +15,11 @@ const dailyCodingChallengeJob = async (client) => {
 				challenge.id,
 				challenge.difficulty,
 				challenge.url,
-				leetcodeStore.topic,
+				challenge.topic,
 				"This weeks topic"
 			)
 		);
-		const day = new Date().getDay();
-		leetcodeStore.difficulty = numToDifficulty(day);
-		console.log("Leetcode difficulty changed!")
-		if (day === 6) {
-			console.log("Leetcode topic changed!")
-			keys = Object.keys(QuestionStore)
-			leetcodeStore.topic = keys[Math.floor(Math.random() * keys.length)];
-		}
+
 		console.log("Daily Challenge Message Success");
 	} catch (e) {
 		console.log(e);
@@ -49,16 +27,14 @@ const dailyCodingChallengeJob = async (client) => {
 	}
 };
 
-const numToDifficulty = (num) => {
-	if (num === 0 || num === 1) {
-		return "easy";
-	}
-	if (num === 2 || num === 3 || num === 4 || num === 5) {
-		return "medium";
-	}
-	return "hard";
+
+//Gets the number of days since 09/07/2020
+const daysSinceFirst = () => {
+	const first = new Date("09/07/2020");
+	const today = new Date();
+	const diffTime = today.getTime() - first.getTime();
+	const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+	return diffDays;
 };
-
-
 
 module.exports = dailyCodingChallengeJob;
