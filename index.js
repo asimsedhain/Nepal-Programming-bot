@@ -1,49 +1,52 @@
 require("dotenv").config();
+const Discord = require("discord.js");
+
+const client = new Discord.Client();
+const registerJob = require("./utils/registerJob");
+const registerCommand = require("./utils/registerCommand")
+const isRegisteredCommand = require("./utils/isRegisteredCommand")
+const executeCommand = require("./utils/executeCommand")
+
+const pomoCommandHandler = require("./handlers/pomoCommandHandler");
+const lcCommandHandler = require("./handlers/lcCommandHandler");
+
+const dailyPomodoroResetJob = require("./jobs/dailyPomodoroResetJob");
+const dailyCodingChallengeJob = require("./jobs/dailyCodingChallengeJob");
+
+const displayMessage = require("./utils/displayMessage");
+
 const TOKEN = process.env.TOKEN;
 const WELCOME_CHANNEL_ID = process.env.WELCOME_CHANNEL_ID;
 const ROLES_CHANNEL_ID = process.env.ROLES_CHANNEL_ID;
 const RULES_CHANNEL_ID = process.env.RULES_CHANNEL_ID;
 const CONVERSATION_CHANNEL_ID = process.env.CONVERSATION_CHANNEL_ID;
-const Discord = require("discord.js");
 
-const createJob = require("./utils/createJob");
-const pomoCommandHandler = require("./handlers/pomoCommandHandler");
-const lcCommandHandler = require("./handlers/lcCommandHandler");
-const dailyPomodoroResetJob = require("./jobs/dailyPomodoroResetJob");
-const dailyCodingChallengeJob = require("./jobs/dailyCodingChallengeJob");
-const displayMessage = require("./utils/displayMessage");
-
-const client = new Discord.Client();
-
-// TODO
-// refactor
-const commands = {};
-commands["!pomo"] = pomoCommandHandler;
-commands["!lc"] = lcCommandHandler;
 
 client.on("ready", async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	createJob(
+	registerJob(
 		"Pomodoro",
 		() => {
 			dailyPomodoroResetJob(client);
 		},
 		"0 0 0 * * *"
 	);
-	createJob(
+	registerJob(
 		"Leetcode",
 		() => {
 			dailyCodingChallengeJob(client);
 		},
 		"0 0 0 * * *"
 	);
+	registerCommand("!pomo", pomoCommandHandler)
+	registerCommand("!lc", lcCommandHandler)
 });
 
 client.on("message", (message) => {
 	args = message.content.split(/ +/);
 	prefix = args[0];
-	if (prefix in commands) {
-		commands[prefix](message, args);
+	if (isRegisteredCommand(prefix)) {
+		executeCommand(prefix, message, args)
 	}
 });
 
