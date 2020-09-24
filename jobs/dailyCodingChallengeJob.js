@@ -3,22 +3,31 @@ const Discord = require("discord.js");
 const displayLeetcode = require("../utils/displayLeetcode");
 
 const DAILY_CHALLENGE_CHANNEL_ID = process.env.DAILY_CHALLENGE_CHANNEL_ID;
+const DAILY_CHALLENGE_CHANNEL_ID_THE_GRIND =
+	process.env.DAILY_CHALLENGE_CHANNEL_ID_THE_GRIND;
 
 const dailyCodingChallengeJob = async (client) => {
 	try {
-		const challenge = OrderedQuestionStore[daysSinceFirst()]	
-		const channel = await client.channels.fetch(DAILY_CHALLENGE_CHANNEL_ID);
-		channel.send(
-			displayLeetcode(
-				"Daily Coding Challenge!!",
-				challenge.title,
-				challenge.id,
-				challenge.difficulty,
-				challenge.url,
-				challenge.topic,
-				"This weeks topic"
-			)
-		);
+		const challenge = OrderedQuestionStore[daysSinceFirst()];
+		const channelIds = [
+			DAILY_CHALLENGE_CHANNEL_ID,
+			DAILY_CHALLENGE_CHANNEL_ID_THE_GRIND,
+		];
+		for (channelId of channelIds) {
+			console.log(channelId)
+			const channel = await client.channels.fetch(channelId);
+			channel.send(
+				displayLeetcode(
+					"Daily Coding Challenge!!",
+					challenge.title,
+					challenge.id,
+					challenge.difficulty,
+					challenge.url,
+					challenge.topic,
+					"This weeks topic"
+				)
+			);
+		}
 
 		console.log("Daily Challenge Message Success");
 	} catch (e) {
@@ -26,7 +35,6 @@ const dailyCodingChallengeJob = async (client) => {
 		console.log("Daily Challenge Message Failed");
 	}
 };
-
 
 //Gets the number of days since 09/07/2020
 const daysSinceFirst = () => {
