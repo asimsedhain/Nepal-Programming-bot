@@ -10,7 +10,7 @@ const dailyCodingChallengeJob = async (client) => {
 	try {
 		const challenge = OrderedQuestionStore[daysSinceFirst()];
 		const channelIds = [
-			DAILY_CHALLENGE_CHANNEL_ID,
+			//DAILY_CHALLENGE_CHANNEL_ID,
 			DAILY_CHALLENGE_CHANNEL_ID_THE_GRIND,
 		];
 		for (channelId of channelIds) {

@@ -24,13 +24,13 @@ const CONVERSATION_CHANNEL_ID = process.env.CONVERSATION_CHANNEL_ID;
 
 client.on("ready", async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	registerJob(
-		"Pomodoro",
-		() => {
-			dailyPomodoroResetJob(client);
-		},
-		"0 0 0 * * *"
-	);
+	//registerJob(
+		//"Pomodoro",
+		//() => {
+			//dailyPomodoroResetJob(client);
+		//},
+		//"0 0 0 * * *"
+	//);
 	registerJob(
 		"Leetcode",
 		() => {
