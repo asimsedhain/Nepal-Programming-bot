@@ -1,12 +1,11 @@
 import { Todo } from "./todo";
 
 export interface TodoStoreInterface {
-	AddTodo(todo: Todo): void;
-	RemoveTodo(id: string): void;
-	ModifyTodo(todo: Todo): void;
-	AssignTodo(id: string, user: string): void;
-	UnassignTodo(id: string, user: string): void;
-	GetTodo(id: string): Todo;
-	GetAllTodo(): [Todo];
-	[key: string]: any;
+	AddTodo(description: string, server: string): Promise<void>;
+	RemoveTodo(id: number, server: string): Promise<void>;
+	ModifyTodo(id: number, description: string, server: string): Promise<void>;
+	AssignTodo(id: number, user: string, server: string): Promise<void>;
+	UnassignTodo(id: number, user: string, server: string): Promise<void>;
+	GetTodo(id: number, server: string): Promise<Todo | null>;
+	GetAllTodo(server: string): Promise<Todo[] | null>;
 }
