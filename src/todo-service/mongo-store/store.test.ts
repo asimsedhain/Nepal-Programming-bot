@@ -14,15 +14,13 @@ describe("MongoStore ", () => {
 			}
 		);
 	});
-	after((done) => {
-		model.deleteMany({}, undefined);
+	after(async () => {
+		await model.deleteMany({}, undefined);
 
-		mongoose.connection.close(true, () => {
-			done();
-		});
+		await mongoose.connection.close(true);
 	});
-	beforeEach((done) => {
-		model.deleteMany({}, undefined, done);
+	beforeEach(async() => {
+		await model.deleteMany({}, undefined);
 	});
 	it("should add todo", async () => {
 		const service = new MongoStore();
@@ -69,6 +67,26 @@ describe("MongoStore ", () => {
 		let todos: Todo[] = <Todo[]>preCoersionTodos;
 
 		assert.lengthOf(todos, 0);
+	});
+	it("should mark and unmake todo as complete", async () => {
+		const service = new MongoStore();
+
+		const todo = "todo";
+		const server = "server";
+		await service.AddTodo(todo, server);
+		let preCoersionTodos = await service.GetAllTodo(server);
+
+		assert.isNotNull(preCoersionTodos);
+
+		let todos: Todo[] = <Todo[]>preCoersionTodos;
+		assert.isFalse(todos[0].IsComplete)
+		await service.ToggleCompletion(0, server);
+		todos = <Todo[]> await service.GetAllTodo(server)
+		assert.isTrue(todos[0].IsComplete)
+		await service.ToggleCompletion(0, server);
+		todos = <Todo[]> await service.GetAllTodo(server)
+		assert.isFalse(todos[0].IsComplete)
+
 	});
 	it("should remove todos one at a time", async () => {
 		const service = new MongoStore();

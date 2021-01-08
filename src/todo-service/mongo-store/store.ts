@@ -10,7 +10,7 @@ export class MongoStore implements TodoStoreInterface {
 		await model.updateOne(
 			filter,
 			{
-				$push: { Todos: { Description: description } },
+				$push: { Todos: { Description: description, IsComplete: 0 } },
 			},
 			{ upsert: true }
 		);
@@ -26,6 +26,13 @@ export class MongoStore implements TodoStoreInterface {
 			{ upsert: false }
 		);
 		await model.updateOne(filter, { $pull: { Todos: null } });
+		return;
+	}
+	async ToggleCompletion(id: number, server: string): Promise<void> {
+		const filter = { Server: server };
+		await model.updateOne(filter, {
+			$bit: { [`Todos.${id}.IsComplete`]: { xor: 1 } },
+		});
 		return;
 	}
 	async ModifyTodo(
@@ -58,7 +65,7 @@ export class MongoStore implements TodoStoreInterface {
 		});
 		return;
 	}
-	async GetTodo(id: number, server: string): Promise<Todo | null> {
+	async GetTodo(id: number, server: string): Promise<Todo> {
 		const filter = { Server: server };
 		const doc = await model.findOne(filter, { "Todos.$": id });
 		const todo = {
@@ -66,10 +73,11 @@ export class MongoStore implements TodoStoreInterface {
 			Description: doc?.Todos[0].Description,
 			AssignedUsers: doc?.Todos[0].AssignedUsers,
 			Server: server,
+			IsComplete: doc.Todos[0].IsComplete === 1 ? true : false,
 		};
 		return todo;
 	}
-	async GetAllTodo(server: string): Promise<Todo[] | null> {
+	async GetAllTodo(server: string): Promise<Todo[]> {
 		const filter = { Server: server };
 
 		let todoArr: Todo[] = [];
@@ -83,6 +91,7 @@ export class MongoStore implements TodoStoreInterface {
 				Description: doc.Todos[i].Description,
 				Server: server,
 				AssignedUsers: new Set(doc.Todos[i].AssignedUsers),
+				IsComplete: doc.Todos[i].IsComplete === 1 ? true : false,
 			});
 		}
 		return todoArr;

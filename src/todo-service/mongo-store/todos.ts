@@ -1,14 +1,20 @@
 import mongoose, { Schema } from "mongoose";
 
-
 const Todo = {
 	Description: String,
-	AssignedUsers: {type: [String], required: false},
+	AssignedUsers: { type: [String], required: false },
+	IsComplete: { type: Number, default: 0 },
 };
 
 interface Todos extends mongoose.Document {
 	Server: string;
-	Todos: { Description: string; AssignedUsers?: string[] }[]|null;
+	Todos:
+		| {
+				Description: string;
+				AssignedUsers?: string[];
+				IsComplete: number;
+		  }[]
+		| null;
 }
 
 const TodosSchema: Schema = new Schema({
