@@ -96,4 +96,7 @@ export class MongoStore implements TodoStoreInterface {
 		}
 		return todoArr;
 	}
+	async GetTodosLength(server: string): Promise<number>{
+		return (await this.GetAllTodo(server)).length
+	}
 }

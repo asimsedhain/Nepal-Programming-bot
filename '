@@ -1,6 +1,0 @@
-export interface Todo{
-	Id: string;
-	Description: string;
-	Server: string;
-	AssignedUsers: [string];
-}

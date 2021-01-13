@@ -2,24 +2,12 @@ import { assert } from "chai";
 import { MongoStore } from "./store";
 import { Todo } from "../todo";
 import model from "./todos";
-import mongoose from "mongoose";
 
 describe("MongoStore ", () => {
-	before((done) => {
-		mongoose.connect(
-			"mongodb://localhost:27017",
-			{ useNewUrlParser: true, useUnifiedTopology: true },
-			(err) => {
-				done(err);
-			}
-		);
+	beforeEach(async () => {
+		await model.deleteMany({}, undefined);
 	});
 	after(async () => {
-		await model.deleteMany({}, undefined);
-
-		await mongoose.connection.close(true);
-	});
-	beforeEach(async() => {
 		await model.deleteMany({}, undefined);
 	});
 	it("should add todo", async () => {
@@ -79,14 +67,13 @@ describe("MongoStore ", () => {
 		assert.isNotNull(preCoersionTodos);
 
 		let todos: Todo[] = <Todo[]>preCoersionTodos;
-		assert.isFalse(todos[0].IsComplete)
+		assert.isFalse(todos[0].IsComplete);
 		await service.ToggleCompletion(0, server);
-		todos = <Todo[]> await service.GetAllTodo(server)
-		assert.isTrue(todos[0].IsComplete)
+		todos = <Todo[]>await service.GetAllTodo(server);
+		assert.isTrue(todos[0].IsComplete);
 		await service.ToggleCompletion(0, server);
-		todos = <Todo[]> await service.GetAllTodo(server)
-		assert.isFalse(todos[0].IsComplete)
-
+		todos = <Todo[]>await service.GetAllTodo(server);
+		assert.isFalse(todos[0].IsComplete);
 	});
 	it("should remove todos one at a time", async () => {
 		const service = new MongoStore();
@@ -152,7 +139,7 @@ describe("MongoStore ", () => {
 
 		assert.isTrue(todos[0].AssignedUsers.has(user2), "should have user2");
 
-		service.UnassignTodo(0, user2, server);
+		await service.UnassignTodo(0, user2, server);
 
 		todos = <Todo[]>await service.GetAllTodo(server);
 
@@ -161,7 +148,7 @@ describe("MongoStore ", () => {
 			todos[0].AssignedUsers.has(user2),
 			"should not have user2"
 		);
-		service.UnassignTodo(0, user1, server);
+		await service.UnassignTodo(0, user1, server);
 		todos = <Todo[]>await service.GetAllTodo(server);
 		assert.isFalse(
 			todos[0].AssignedUsers.has(user1),

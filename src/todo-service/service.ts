@@ -17,9 +17,23 @@ export class TodoService implements TodoServiceInterface {
 		this.store = store;
 	}
 	async AddTodo(description: string, server: string): Promise<void> {
+		if (description.trim() === "") {
+			throw "Invalid Todo Description";
+		}
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
 		return this.store.AddTodo(description, server);
 	}
+
 	async RemoveTodo(id: number, server: string): Promise<void> {
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+			throw "Invalid Todo Id";
+		}
+
 		return this.store.RemoveTodo(id, server);
 	}
 	async ModifyTodo(
@@ -27,12 +41,36 @@ export class TodoService implements TodoServiceInterface {
 		description: string,
 		server: string
 	): Promise<void> {
+		if (description.trim() === "") {
+			throw "Invalid Todo Description";
+		}
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+			throw "Invalid Todo Id";
+		}
 		return this.store.ModifyTodo(id, description, server);
 	}
 	async AssignTodo(id: number, user: string, server: string): Promise<void> {
+		if (user.trim() === "") {
+			throw "Invalid Todo User";
+		}
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+			throw "Invalid Todo Id";
+		}
 		return this.store.AssignTodo(id, user, server);
 	}
 	async ToggleCompletion(id: number, server: string): Promise<void> {
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+			throw "Invalid Todo Id";
+		}
 		return this.store.ToggleCompletion(id, server);
 	}
 	async UnassignTodo(
@@ -40,9 +78,21 @@ export class TodoService implements TodoServiceInterface {
 		user: string,
 		server: string
 	): Promise<void> {
+		if (user.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+			throw "Invalid Todo Id";
+		}
 		return this.store.UnassignTodo(id, user, server);
 	}
 	async GetAllTodo(server: string): Promise<Todo[]> {
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
 		return this.store.GetAllTodo(server);
 	}
 }
