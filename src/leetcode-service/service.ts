@@ -7,6 +7,8 @@ export interface LeetcodeServiceInterface {
 	SearchQuestion(key: string): Promise<Question[]>;
 	AddSubscriber(server: string, channel: string): Promise<void>;
 	RemoveSubscriber(server: string, channel: string): Promise<void>;
+	GetAllSubscriber(): Promise<string[]>;
+	GetAllTopics(): Promise<string[]>;
 }
 
 export class LeetcodeService implements LeetcodeServiceInterface {
@@ -15,12 +17,12 @@ export class LeetcodeService implements LeetcodeServiceInterface {
 		this.store = store;
 	}
 
-	async GetRandomQuestion(
-		difficulty = "",
-		topic = ""
-	): Promise<Question> {}
+	async GetRandomQuestion(difficulty = "", topic = ""): Promise<Question> {}
 	async GetQuestion(id: number): Promise<Question> {}
 	async SearchQuestion(key: string): Promise<Question[]> {}
+
 	async AddSubscriber(server: string, channel: string): Promise<void> {}
 	async RemoveSubscriber(server: string, channel: string): Promise<void> {}
+	async GetAllSubscriber(): Promise<string[]> {}
+	async GetAllTopics(): Promise<string[]> {}
 }
