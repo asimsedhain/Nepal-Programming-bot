@@ -3,7 +3,7 @@ import { MongoStore } from "./store";
 import { Todo } from "../todo";
 import model from "./todos";
 
-describe("MongoStore ", () => {
+describe("Todos MongoStore", () => {
 	beforeEach(async () => {
 		await model.deleteMany({}, undefined);
 	});

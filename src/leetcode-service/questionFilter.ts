@@ -1,4 +1,4 @@
 export interface QuestionFilter {
-	Difficulty?: string;
+	Difficulty?: "easy"|"medium"|"hard";
 	Topic?: string;
 }

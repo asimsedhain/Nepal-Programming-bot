@@ -1,18 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
 const Question = {
-	Id: Number,
-	Title: String,
-	Url: String,
-	Difficulty: String,
-	Topic: String,
+	Id: { type: Number, required: true, unique: true },
+	Title: { type: String, required: true },
+	Url: { type: String, required: true },
+	Difficulty: { type: String, required: true },
+	Topic: { type: String, required: true },
 };
 
-interface Question extends mongoose.Document {
+export interface Question extends mongoose.Document {
 	Id: number;
 	Title: string;
 	Url: string;
-	Difficulty: "easy" | "medium" | "hard";
+	Difficulty: string;
 	Topic: string;
 }
 
