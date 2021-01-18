@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
+let mongod: MongoMemoryServer;
 export const mochaHooks = {
 	async beforeAll() {
-		console.log("Make sure you have Mongo Running in the background!!")
-		await mongoose.connect("mongodb://localhost:27017", {
+		mongod = new MongoMemoryServer();
+		const uri = await mongod.getUri();
+		await mongoose.connect(uri, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		});
 	},
 	async afterAll() {
 		await mongoose.connection.close(true);
+		await mongod.stop();
 	},
 };

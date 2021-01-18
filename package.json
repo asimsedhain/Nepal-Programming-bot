@@ -18,6 +18,7 @@
     "@types/node": "^14.14.17",
     "chai": "^4.2.0",
     "mocha": "^8.2.1",
+    "mongodb-memory-server": "^6.9.3",
     "nodemon": "^2.0.6",
     "testcontainers": "^6.4.1",
     "ts-node": "^9.1.1",
