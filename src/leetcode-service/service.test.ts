@@ -1,6 +1,15 @@
 //import { assert } from "chai";
-//import { LeetcodeService } from "./service";
+import {LeetcodeService} from "./service";
+import {MongoStore} from "./mongo-store"
+import {verify, mock, instance, when, anything} from "ts-mockito"
 
+describe("Leetcode Service with mock store", ()=>{
+	it("should get random question", async()=>{
+	//TODO
+
+
+	})
+})
 //describe("Leetcode Service with mongo store", () => {
 	//it("should get a random question", async () => {
 		//const service = new LeetcodeService();
