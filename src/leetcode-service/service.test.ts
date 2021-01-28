@@ -1,67 +1,92 @@
-//import { assert } from "chai";
-import {LeetcodeService} from "./service";
-import {MongoStore} from "./mongo-store"
-import {verify, mock, instance, when, anything} from "ts-mockito"
+import { assert } from "chai";
+import { LeetcodeService } from "./service";
+import { MongoStore } from "./mongo-store";
+import { verify, mock, instance, when, anything } from "ts-mockito";
 
-describe("Leetcode Service with mock store", ()=>{
-	it("should get random question", async()=>{
-	//TODO
+describe("Leetcode Service with mock store", () => {
+	it("should get error when getting a random question", async () => {
+		//TODO
+		//
+		const mockStore = mock(MongoStore);
+		when(mockStore.GetAllQuestionTopics()).thenResolve(["array", "bit_manipulation"])
+		
+		const store = instance(mockStore);
+		const service = new LeetcodeService(store);
 
+		try {
+			await service.GetRandomQuestion("crazy");
+		} catch (error) {
+			console.log("error", error)
+			assert.equal(error, "Unsupported Param");
+			verify(mockStore.GetRandomQuestion(anything())).never();
 
-	})
-})
-//describe("Leetcode Service with mongo store", () => {
-	//it("should get a random question", async () => {
-		//const service = new LeetcodeService();
-		//let question = await service.GetRandomQuestion();
-		//assert.isTrue(question, "checking if we get a question");
-		//question = await service.GetRandomQuestion("hard");
-		//assert.equal(question.Difficulty, "hard");
-		//question = await service.GetRandomQuestion("easy");
-		//assert.equal(question.Difficulty, "easy");
-		//question = await service.GetRandomQuestion("Medium");
-		//assert.equal(question.Difficulty, "medium");
+		}
+		try {
+			await service.GetRandomQuestion("crazy", "crazy");
+		} catch (error) {
+			console.log("error", error)
+			assert.equal(error, "Unsupported Param");
+			verify(mockStore.GetRandomQuestion(anything())).never();
+		}
+		await service.GetRandomQuestion();
+		verify(mockStore.GetRandomQuestion(anything())).once();
+	});
 
-		//question = await service.GetRandomQuestion("", "search");
-		//assert.equal(question.Topic, "search");
-		//question = await service.GetRandomQuestion("easy", "tree");
-		//assert.equal(question.Topic, "tree");
-		//assert.equal(question.Difficulty, "easy");
+	it("should get error when getting question by id", async () => {
+		const mockStore = mock(MongoStore);
+		const store = instance(mockStore);
+		const service = new LeetcodeService(store);
 
+		try {
+			await service.GetQuestion(-1);
+		} catch (error) {
+			assert.equal(error, "Id should be greater than zero");
+			verify(mockStore.GetQuestionById(anything())).never();
+		}
+		await service.GetQuestion(1);
+		verify(mockStore.GetQuestionById(1)).once();
+	});
 
-	//});
-	//it("should get a question based on the Id", async () => {
-		//const service = new LeetcodeService();
-		//let question = await service.GetQuestion(1137);
-		//assert.isTrue(question, "checking if we get a question");
+	it("should throw error when searching with an empty string", async () => {
+		const mockStore = mock(MongoStore);
+		const store = instance(mockStore);
+		const service = new LeetcodeService(store);
 
-		//assert.equal(question.Id, 1337);
-		//assert.equal(question.Title, "The K Weakest Rows in a Matrix");
-		//assert.equal(question.Difficulty, "Easy");
-		//assert.equal(question.Topic, "search");
-	//});
+		try {
+			await service.SearchQuestion("");
+		} catch (error) {
+			assert.equal(error, "Search key is empty");
+			verify(mockStore.SearchQuestionByTitle(anything())).never();
+		}
 
-	//it("should search for questions based on the title", async () => {
-		//const service = new LeetcodeService();
-		//let questions = await service.SearchQuestion(
-			//"Weakest Rows in a Matrix"
-		//);
+		await service.SearchQuestion("merge")
+		verify(mockStore.SearchQuestionByTitle("merge")).once()
+	});
 
-		//assert(questions.length >= 0, "should get a result");
-		//let contains = false;
-		//for (const question of questions) {
-			//if (question.Topic === "The K Weakest Rows in a Matrix") {
-				//contains = true;
-			//}
-		//}
-		//assert(contains);
-	//});
-	//it("should get all the topics of the questions", async () => {
-		//const service = new LeetcodeService();
-		//let topics = await service.GetAllTopics();
-		//assert(topics.length>0)
+	it("should get error when adding a subscriber", async () => {
+		const mockStore = mock(MongoStore);
+		const store = instance(mockStore);
+		const service = new LeetcodeService(store);
 
-	//});
-	////TODO
-	////Complete Tests for Subscribers
-//});
+		try {
+			await service.AddSubscriber("", "");
+		} catch (error) {
+			assert.equal(error, "Server and channel should be provided");
+			verify(mockStore.AddSubscriber(anything())).never();
+		}
+
+	});
+	it("should get error when removing a subscriber", async () => {
+		const mockStore = mock(MongoStore);
+		const store = instance(mockStore);
+		const service = new LeetcodeService(store);
+
+		try {
+			await service.RemoveSubscriber("", "");
+		} catch (error) {
+			assert.equal(error, "Server and channel should be provided");
+			verify(mockStore.RemoveSubscriber(anything())).never();
+		}
+	});
+
+});

@@ -7,4 +7,6 @@ export interface QuestionStoreInterface {
 	SearchQuestionByTitle(title: string): Promise<Question[]>;
 	AddSubscriber(subscriber: Subscriber): Promise<void>;
 	RemoveSubscriber(subscriber: Subscriber): Promise<void>;
+	GetAllSubscribers(): Promise<Subscriber[]>
+	GetAllQuestionTopics(): Promise<string[]>
 }

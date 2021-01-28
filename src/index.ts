@@ -5,8 +5,9 @@ import { log } from "./utils/logger";
 
 import Discord from "discord.js";
 import mongoose from "mongoose";
-import { CommandRunner, CommandStore, TodoHandler } from "./command-handlers";
-import { TodoService, MongoStore as TodoStore } from "./todo-service";
+import {CommandRunner, CommandStore, TodoHandler, LeetcodeHandler} from "./command-handlers";
+import {TodoService, MongoStore as TodoStore} from "./todo-service";
+import { LeetcodeService, MongoStore as LeetcodeStore } from "./leetcode-service";
 const TOKEN = process.env.TOKEN;
 const MONGO_URI: string = <string>process.env.MONGO_URI;
 
@@ -29,8 +30,11 @@ client.on("ready", async () => {
 	log(`Logged in as ${client.user?.tag}`);
 	const todoService = new TodoService(new TodoStore());
 	const todoHandler = new TodoHandler(todoService);
+	const leetcodeService = new LeetcodeService(new LeetcodeStore())
+	const leetcodeHandler = new LeetcodeHandler(leetcodeService)
 
 	commandRunner.Register("!todo", todoHandler);
+	commandRunner.Register("!lc", leetcodeHandler);
 	log("Commands loaded");
 });
 

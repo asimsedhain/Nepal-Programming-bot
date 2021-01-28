@@ -3,6 +3,7 @@ import { QuestionFilter } from "../questionFilter";
 import { QuestionStoreInterface } from "../store";
 import { Subscriber } from "../subscriber";
 import questionModel from "./questions";
+import subscriberModel from "./subscribers"
 
 export class MongoStore implements QuestionStoreInterface {
 	constructor() {}
@@ -22,14 +23,26 @@ export class MongoStore implements QuestionStoreInterface {
 	}
 	async SearchQuestionByTitle(title: string): Promise<Question[]> {
 		console.log(title, "Not Implemented");
-		return []
+		return [];
 	}
 	async AddSubscriber(subscriber: Subscriber): Promise<void> {
-		console.log(subscriber, "Not Implemented");
+		const sub = {_id: `${subscriber.Server}_${subscriber.Channel}`, Server: subscriber.Server, Channel: subscriber.Channel}
+		await subscriberModel.insertMany([sub])
 		return;
 	}
 	async RemoveSubscriber(subscriber: Subscriber): Promise<void> {
-		console.log(subscriber, "Not Implemented");
+		const filter = {_id: `${subscriber.Server}_${subscriber.Channel}`}
+		await subscriberModel.remove(filter)
 		return;
+	}
+
+	async GetAllSubscribers(): Promise<Subscriber[]> {
+		const subs = await subscriberModel.find({})
+		return subs
+	}
+
+	async GetAllQuestionTopics(): Promise<string[]> {
+		const topics = await questionModel.distinct("Topic")
+		return topics
 	}
 }

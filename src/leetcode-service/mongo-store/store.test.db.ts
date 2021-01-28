@@ -6,7 +6,6 @@ import * as data from "../../../assets/leetcode-transformed-question-list.json";
 
 describe("Questions MongoStore", () => {
 	before(async () => {
-
 		const dataArray = [];
 
 		for (let i = 0; i < 100; i++) {
@@ -56,5 +55,35 @@ describe("Questions MongoStore", () => {
 		question = await store.GetRandomQuestion(filter);
 		assert.equal(question.Topic, "tree");
 		assert.equal(question.Difficulty, "easy");
+	});
+
+	it("Should add and remove subscriber", async () => {
+		const store = new MongoStore();
+		const server = "server";
+		const channel = "channel";
+		const subscriber = { Server: server, Channel: channel };
+		await store.AddSubscriber(subscriber);
+		const subs = await store.GetAllSubscribers();
+		assert(subs.length != 0);
+		assert.equal(
+			subs[0].Server,
+			subscriber.Server,
+			"assert the subs are equal"
+		);
+		assert.equal(
+			subs[0].Channel,
+			subscriber.Channel,
+			"assert the subs are equal"
+		);
+
+		await store.RemoveSubscriber(subscriber);
+		const emptySubs = await store.GetAllSubscribers();
+		assert(emptySubs.length === 0);
+	});
+
+	it("Should get all topics", async () => {
+		const store = new MongoStore();
+		let topics = await store.GetAllQuestionTopics();
+		assert(topics.length != 0);
 	});
 });
