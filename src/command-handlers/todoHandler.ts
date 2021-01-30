@@ -110,5 +110,5 @@ export class TodoHandler implements CommandHandlerInterface {
 	}
 }
 function showSimpleMessage(description: string): MessageEmbed {
-	return new MessageEmbed().setDescription(description).setColor("@f3f");
+	return new MessageEmbed().setDescription(description).setColor("#00f0ff");
 }

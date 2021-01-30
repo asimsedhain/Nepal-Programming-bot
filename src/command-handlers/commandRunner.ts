@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { CommandHandlerInterface } from "./commandHandler";
 
 export interface CommandRunnerInterface {
@@ -28,15 +28,20 @@ export class CommandRunner implements CommandRunnerInterface {
 	}
 
 	Execute(message: Message) {
-		const args = message.content.split(/ +/);
-		if (args.length == 0) {
-			return;
+		try {
+			const args = message.content.split(/ +/);
+			if (args.length == 0) {
+				return;
+			}
+			const prefix = args[0];
+			if (!(prefix in this.store)) {
+				return;
+			}
+			this.store[prefix].Handle(message, args);
+		} catch (err) {
+			message.channel.send(new MessageEmbed().setDescription(err));
 		}
-		const prefix = args[0];
-		if (!(prefix in this.store)) {
-			return;
-		}
-		this.store[prefix].Handle(message, args);
+
 		return;
 	}
 }
