@@ -30,8 +30,8 @@
 		"test": "mocha -r ts-node/register 'src/**/*.test.ts'",
 		"test-all": "mocha -r ts-node/register 'src/**/*.test*.ts' --require 'src/roothooks.ts' --timeout 3000",
 		"start-dev": "npx ts-node './src/index.ts'",
-		"start": "node ./build/src/index.js",
-		"postinstall":"tsc"
+		"start": "node dist/index.js",
+		"postinstall":"tsc --outDir dist"
 	},
 	"repository": {
 		"type": "git",
