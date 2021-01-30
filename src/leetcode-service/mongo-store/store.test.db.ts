@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { MongoStore } from "./store";
 import { QuestionFilter } from "../questionFilter";
 import model from "./questions";
-import * as data from "../../../assets/leetcode-transformed-question-list.json";
+import * as data from "./leetcode-transformed-question-list.json";
 
 describe("Questions MongoStore", () => {
 	before(async () => {
