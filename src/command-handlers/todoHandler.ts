@@ -29,7 +29,10 @@ export class TodoHandler implements CommandHandlerInterface {
 			.join("\n\n");
 
 		message.channel.send(
-			new MessageEmbed().setTitle("**Todos**").setDescription(todosString)
+			new MessageEmbed()
+				.setTitle("**Todos**")
+				.setDescription(todosString)
+				.setColor("#00f0ff")
 		);
 	}
 
