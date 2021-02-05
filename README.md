@@ -14,7 +14,7 @@ The features of the bot are listed below.
 |	Command	|	Description	|
 |-----------|---------------|
 |	!lc		|Shows help description for !lc|
-|	!lc <easy\|med\|hard> <category>| Shows a random leetcode with the given difficulty and category. If no difficulty or category is selected, then a random question will be picked|
+|	!lc <easy\|med\|hard> \<category\>| Shows a random leetcode with the given difficulty and category. If no difficulty or category is selected, then a random question will be picked|
 |	!lc subscribe	| Subscribes channel and server to daily leetcode question|
 |	!lc unsubscribe | Unsubscribes channel and server to daily leetcode question|
 |	!todo	|	Shows a list of todos with their TASK_ID|
