@@ -10,4 +10,5 @@ export interface TodoStoreInterface {
 	GetTodo(id: number, server: string): Promise<Todo>;
 	GetAllTodo(server: string): Promise<Todo[]>;
 	GetTodosLength(server: string): Promise<number>;
+	RemoveAllTodo(server: string): Promise<void>;
 }

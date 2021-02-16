@@ -28,6 +28,12 @@ export class MongoStore implements TodoStoreInterface {
 		await model.updateOne(filter, { $pull: { Todos: null } });
 		return;
 	}
+	async RemoveAllTodo(server: string): Promise<void> {
+		const filter = { Server: server };
+
+		await model.updateOne(filter, { $set: { Todos: [] } });
+		return;
+	}
 	async ToggleCompletion(id: number, server: string): Promise<void> {
 		const filter = { Server: server };
 		await model.updateOne(filter, {
@@ -96,7 +102,7 @@ export class MongoStore implements TodoStoreInterface {
 		}
 		return todoArr;
 	}
-	async GetTodosLength(server: string): Promise<number>{
-		return (await this.GetAllTodo(server)).length
+	async GetTodosLength(server: string): Promise<number> {
+		return (await this.GetAllTodo(server)).length;
 	}
 }

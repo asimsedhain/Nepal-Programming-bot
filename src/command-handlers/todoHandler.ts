@@ -49,6 +49,11 @@ export class TodoHandler implements CommandHandlerInterface {
 		await this.service.RemoveTodo(todoId, serverId);
 		message.channel.send(showSimpleMessage("Todo Removed"));
 	}
+	async handleRemoveAllCommand(message: Message, args: string[]) {
+		const serverId = <string>message.guild?.id;
+		await this.service.RemoveAllTodo(serverId);
+		message.channel.send(showSimpleMessage("Todo Removed"));
+	}
 
 	async handleModifyCommand(message: Message, args: string[]) {
 		const serverId = <string>message.guild?.id;
@@ -90,6 +95,9 @@ export class TodoHandler implements CommandHandlerInterface {
 				break;
 			case "remove":
 				await this.handleRemoveCommand(message, args);
+				break;
+			case "removeall":
+				await this.handleRemoveAllCommand(message, args);
 				break;
 			case "modify":
 				await this.handleModifyCommand(message, args);

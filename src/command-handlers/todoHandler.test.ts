@@ -82,6 +82,31 @@ describe("TodoHandler", () => {
 		verify(mockGuild.id).once();
 		verify(mockChannel.send(anyOfClass(MessageEmbed))).once();
 	});
+	it("Should remove all todos", async () => {
+		const serverId = "serverId";
+
+		const mockedService = mock(TodoService);
+
+		const service = instance(mockedService);
+
+		const mockGuild = mock(Guild);
+		when(mockGuild.id).thenReturn(serverId);
+
+		const mockChannel = mock(TextChannel);
+
+		const mockMessage = mock(Message);
+		when(mockMessage.guild).thenReturn(instance(mockGuild));
+		when(mockMessage.channel).thenReturn(instance(mockChannel));
+
+		const message = instance(mockMessage);
+
+		const handler = new TodoHandler(service);
+		await handler.Handle(message, ["!todo", "removeall"]);
+
+		verify(mockedService.RemoveAllTodo(serverId)).once();
+		verify(mockGuild.id).once();
+		verify(mockChannel.send(anyOfClass(MessageEmbed))).once();
+	});
 	it("Should modify todo", async () => {
 		const serverId = "serverId";
 

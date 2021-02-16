@@ -92,6 +92,22 @@ describe("Todos MongoStore", () => {
 
 		assert.lengthOf(todos, 0);
 	});
+	it("should remove all todos at once", async () => {
+		const service = new MongoStore();
+
+		const todo = "todo";
+		const server = "server";
+		await service.AddTodo(todo, server);
+		await service.AddTodo(todo, server);
+		await service.RemoveAllTodo(server);
+		let preCoersionTodos = await service.GetAllTodo(server);
+
+		assert.isNotNull(preCoersionTodos);
+
+		let todos: Todo[] = <Todo[]>preCoersionTodos;
+
+		assert.lengthOf(todos, 0);
+	});
 	it("should modify todo", async () => {
 		const service = new MongoStore();
 

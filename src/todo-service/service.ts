@@ -4,6 +4,7 @@ import { TodoStoreInterface } from "./store";
 export interface TodoServiceInterface {
 	AddTodo(description: string, server: string): Promise<void>;
 	RemoveTodo(id: number, server: string): Promise<void>;
+	RemoveAllTodo(server: string): Promise<void>;
 	ModifyTodo(id: number, description: string, server: string): Promise<void>;
 	ToggleCompletion(id: number, server: string): Promise<void>;
 	AssignTodo(id: number, user: string, server: string): Promise<void>;
@@ -35,6 +36,12 @@ export class TodoService implements TodoServiceInterface {
 		}
 
 		return this.store.RemoveTodo(id, server);
+	}
+	async RemoveAllTodo(server: string): Promise<void> {
+		if (server.trim() === "") {
+			throw "Invalid Todo Server";
+		}
+		return this.store.RemoveAllTodo(server);
 	}
 	async ModifyTodo(
 		id: number,
