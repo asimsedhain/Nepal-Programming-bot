@@ -30,7 +30,6 @@ export class MongoStore implements TodoStoreInterface {
 	}
 	async RemoveAllTodo(server: string): Promise<void> {
 		const filter = { Server: server };
-
 		await model.updateOne(filter, { $set: { Todos: [] } });
 		return;
 	}

@@ -1,5 +1,6 @@
 import { Todo } from "./todo";
 import { TodoStoreInterface } from "./store";
+import { Scheduler, SchedulerInterface } from "./scheduler";
 
 export interface TodoServiceInterface {
 	AddTodo(description: string, server: string): Promise<void>;
@@ -14,8 +15,11 @@ export interface TodoServiceInterface {
 
 export class TodoService implements TodoServiceInterface {
 	protected store: TodoStoreInterface;
+	protected scheduler: SchedulerInterface;
 	constructor(store: TodoStoreInterface) {
 		this.store = store;
+		this.scheduler = new Scheduler();
+		this.scheduler.Start();
 	}
 	async AddTodo(description: string, server: string): Promise<void> {
 		if (description.trim() === "") {
@@ -31,7 +35,7 @@ export class TodoService implements TodoServiceInterface {
 		if (server.trim() === "") {
 			throw "Invalid Todo Server";
 		}
-		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+		if (id < 0 || id >= (await this.store.GetTodosLength(server))) {
 			throw "Invalid Todo Id";
 		}
 
@@ -54,7 +58,7 @@ export class TodoService implements TodoServiceInterface {
 		if (server.trim() === "") {
 			throw "Invalid Todo Server";
 		}
-		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+		if (id < 0 || id >= (await this.store.GetTodosLength(server))) {
 			throw "Invalid Todo Id";
 		}
 		return this.store.ModifyTodo(id, description, server);
@@ -66,7 +70,7 @@ export class TodoService implements TodoServiceInterface {
 		if (server.trim() === "") {
 			throw "Invalid Todo Server";
 		}
-		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+		if (id < 0 || id >= (await this.store.GetTodosLength(server))) {
 			throw "Invalid Todo Id";
 		}
 		return this.store.AssignTodo(id, user, server);
@@ -75,7 +79,7 @@ export class TodoService implements TodoServiceInterface {
 		if (server.trim() === "") {
 			throw "Invalid Todo Server";
 		}
-		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+		if (id < 0 || id >= (await this.store.GetTodosLength(server))) {
 			throw "Invalid Todo Id";
 		}
 		return this.store.ToggleCompletion(id, server);
@@ -91,7 +95,7 @@ export class TodoService implements TodoServiceInterface {
 		if (server.trim() === "") {
 			throw "Invalid Todo Server";
 		}
-		if (id < 0|| id >= (await this.store.GetTodosLength(server))) {
+		if (id < 0 || id >= (await this.store.GetTodosLength(server))) {
 			throw "Invalid Todo Id";
 		}
 		return this.store.UnassignTodo(id, user, server);
